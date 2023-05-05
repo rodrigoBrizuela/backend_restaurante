@@ -22,10 +22,10 @@ const MenusSchema = mongoose.Schema({
     }
 }, {collection: "menus"});
 
-MenusSchema.method("toJSON", function(){
+/*MenusSchema.method("toJSON", function(){
     const {__v, ...object} = this.toObjet();
 
     return object;
-})
+})*/
 
 module.exports = mongoose.model("Menu", MenusSchema);

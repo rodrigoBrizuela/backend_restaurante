@@ -18,7 +18,7 @@ const getPedidos = async (req, res) => {
     }
 }
 
-const postPedidos = async (req, res) => {
+const postItemPedidos = async (req, res) => {
     try {
         const newPedido = new Pedido({
             ...req.body
@@ -32,6 +32,7 @@ const postPedidos = async (req, res) => {
             menu: newPedidoDB
         });
     } catch (error) {
+        console.log(error);
         res.status(500).json({
             ok: false,
             mje: "El pedido no se agrego",
@@ -40,7 +41,7 @@ const postPedidos = async (req, res) => {
     } 
 }
 
-const deletePedidos = async (req, res) => {
+const deleteItemPedidos = async (req, res) => {
     try {
         const idPedidoDelete = req.params.idpedido;
 
@@ -74,12 +75,12 @@ const deletePedidos = async (req, res) => {
     }
 }
 
-const putPedidos = async (req, res) => {
+const putItemPedidos = async (req, res) => {
     try {
         const idPedidoEdit = req.params.idpedido;
         const pedidoEditBody = req.body;
 
-       const pedidoDB = await Pedido.findById(idMenuEdit);
+       const pedidoDB = await Pedido.findById(idPedidoEdit);
 
        if(!pedidoDB) {
         return res.status(404).json(
@@ -90,7 +91,9 @@ const putPedidos = async (req, res) => {
         );
        } 
 
-       const newPedidoUpdate = await Pedido.findByIdAndUpdate(idPedidoEdit, pedidoEditBody,
+       const pedidoUpdate = pedidoDB.menus.push(pedidoEditBody)
+
+       const newPedidoUpdate = await Pedido.findByIdAndUpdate(idPedidoEdit, pedidoUpdate,
         {
             new: true
         });
@@ -116,7 +119,7 @@ const putPedidos = async (req, res) => {
 
 module.exports = {
     getPedidos,
-    postPedidos,
-    deletePedidos,
-    putPedidos
+    postItemPedidos,
+    deleteItemPedidos,
+    putItemPedidos
 }

@@ -15,6 +15,7 @@ const getMenus = async (req, res) => {//Async porque trabajamos con base de dato
             mje: "Hubo un error",
             error: error
         });
+        console.log(error);
     }
 }
 

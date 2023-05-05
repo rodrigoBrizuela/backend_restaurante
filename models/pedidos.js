@@ -8,10 +8,18 @@ const PedidosSchema = mongoose.Schema({
     date: {
         type: Date, //tomar fecha actual
     },
-    menus : [{
-        type: mongoose.Schema.Types.ObjectId, //Declaramos que va a ser un tipo de objeto de mongo
-        ref: "Menu"
-    }], 
+    menus : [
+        {
+            menu: {
+                type: mongoose.Schema.Types.ObjectId, //Declaramos que va a ser un tipo de objeto de mongo
+                ref: "Menu"
+        },
+            cantidad: {
+                type: Number,
+                default: 1
+        }
+    }
+    ], 
     totalCost: {
         type: Number,
     },
@@ -21,10 +29,10 @@ const PedidosSchema = mongoose.Schema({
     }
 }, {collection: "pedidos"});
 
-PedidosSchema.method("toJSON", function(){
+/*PedidosSchema.method("toJSON", function(){
     const {__v, ...object} = this.toObjet();
 
     return object;
-})
+})*/
 
 module.exports = mongoose.model("Pedido", PedidosSchema);

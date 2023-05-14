@@ -18,6 +18,25 @@ const getPedidos = async (req, res) => {
     }
 }
 
+const getOnePedidos = async (req, res) => {
+    try {
+        const pedidoFind = req.params.idpedido;
+        const pedido = await Pedido.findById(pedidoFind);
+        
+        res.json({
+            ok: true,
+            mje: "Estos son los pedidos",
+            pedido: pedido
+        });
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            mje: "Hubo un error",
+            error: error
+        });
+    }
+}
+
 const postItemPedidos = async (req, res) => {
     try {
         const newPedido = new Pedido({
@@ -51,7 +70,7 @@ const deleteItemPedidos = async (req, res) => {
             return res.status(404).json(
                 {
                     ok: false,
-                    mje: "No se encontro el menu"
+                    mje: "No se encontro el pedido"
                 }
             );
         } 
@@ -78,7 +97,8 @@ const deleteItemPedidos = async (req, res) => {
 const putItemPedidos = async (req, res) => {
     try {
         const idPedidoEdit = req.params.idpedido;
-        const pedidoEditBody = req.body;
+        const idMenuEdit = req.params.idmenu;
+        const menuCantidadBody = req.body.cantidad || 1;
 
        const pedidoDB = await Pedido.findById(idPedidoEdit);
 
@@ -91,22 +111,41 @@ const putItemPedidos = async (req, res) => {
         );
        } 
 
-       const pedidoUpdate = pedidoDB.menus.push(pedidoEditBody)
-
-       const newPedidoUpdate = await Pedido.findByIdAndUpdate(idPedidoEdit, pedidoUpdate,
-        {
-            new: true
-        });
-
+       const menuExist = pedidoDB.menus.find((obj) => obj.menu.toString() === idMenuEdit);
+       if(menuExist){
+        await Pedido.findOneAndUpdate(
+            {_id : idPedidoEdit},
+            {
+                $set: {
+                    menus: {
+                        menu: idMenuEdit,
+                        cantidad: menuExist.cantidad + menuCantidadBody
+                    }
+                }
+            }
+        )
+       } else {
+        await Pedido.findOneAndUpdate(
+            {_id: idPedidoEdit},
+            {
+                $push: {
+                    menus: {
+                        menu: idMenuEdit,
+                        cantidad: menuCantidadBody
+                    }
+                }
+            }
+        )
+       }
         res.json(
             {
                 ok: true,
-                mje: "Se actualizo el pedido con exito",
-                pedidoUpdate : newPedidoUpdate
+                mje: "Se actualizo el pedido con exito"
             }
         );
 
     } catch (error) {
+        console.log(error);
         res.status(500).json(
             {
                 ok: false,
@@ -119,6 +158,7 @@ const putItemPedidos = async (req, res) => {
 
 module.exports = {
     getPedidos,
+    getOnePedidos,
     postItemPedidos,
     deleteItemPedidos,
     putItemPedidos

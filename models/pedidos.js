@@ -20,9 +20,6 @@ const PedidosSchema = mongoose.Schema({
         }
     }
     ], 
-    totalCost: {
-        type: Number,
-    },
     status: {
         type: Boolean,
         default : false

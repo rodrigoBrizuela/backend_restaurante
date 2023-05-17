@@ -17,13 +17,13 @@ const loginUsers = async (req, res) => {
             });
         }
 
-        const validatePassword = bcrypt.compareSync(password, userDB.password)
+        const validatePassword = await bcrypt.compare(password, userDB.password)
 
         if(!validatePassword){
             return res.json({
                 ok: false,
                 mje: "Contraseña incorrecta",
-                usuario: userDB.username 
+                usuario: userDB.username
             });
         }
 
@@ -70,11 +70,11 @@ const registerUsers = async (req, res) => {
             });
         }
 
-        const passToken = await jwtGenerate(password);
+        const passEncrypt = await bcrypt.hash(password,12);
 
         const newUser = Usuario({
             username : username,
-            password : passToken,
+            password : passEncrypt,
             email: email
         });
 

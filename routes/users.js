@@ -7,7 +7,7 @@ const router = Router();
 /*  users/  */  
 router.get("/", loginUsers);
 router.post("/", 
-[body("email").isEmail(), body("password").notEmpty().isLength({min: 6}),
+[body("email").isEmail(), body("password").isLength({min: 6}),
 ],registerUsers);
 
 module.exports = router;

@@ -5,7 +5,7 @@ const { body } = require('express-validator');
 const router = Router();
 
 /*  users/  */  
-router.get("/", loginUsers);
+router.post("/", loginUsers);
 router.post("/", 
 [body("email").isEmail(), body("password").isLength({min: 6}),
 ],registerUsers);

@@ -19,7 +19,7 @@ const UsersSchema = mongoose.Schema({
     },
     admin: {
         type: Boolean,
-        default : false,
+        required : true,
     }
 }, {collection: "users"});
 
@@ -30,3 +30,7 @@ const UsersSchema = mongoose.Schema({
 })*/
 
 module.exports = mongoose.model("Usuario", UsersSchema);
+
+//Validacion usuarios
+//Img en menus
+//api en la direccion
